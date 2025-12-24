@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: simple-reactapp
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/notzeman/notzeman/Full-CI-CD-on-single-react-app-microservice.git
+    targetRevision: main
+    path: helm/simple-reactapp
+    helm:
+      valueFiles:
+        - values.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: simple-reactapp
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
